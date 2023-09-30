@@ -101,5 +101,13 @@ void clearBinaryFile(const string& filename) {
 
     out.close();                                            //закрываем файл
     return;                                                 //вылетаем из функции
+}
+
+void del_me(){
+    hjfkjshfskdjfhskdhf
+    sdfs
+    df
+    sdfssdf
+    sdfssdf
 }   
 }
