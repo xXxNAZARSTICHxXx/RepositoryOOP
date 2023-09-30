@@ -7,5 +7,4 @@ float FractionCounter(int t)
 		summer=summer+1.0/k;				//Результирование
 	};
 	return summer;							//Возврат 0
-//берется из аргумента
 }
