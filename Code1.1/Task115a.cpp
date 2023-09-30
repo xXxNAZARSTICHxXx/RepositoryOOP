@@ -14,3 +14,5 @@ assert (2.283332<FractionCounter(5)<2.283334);  //Делаем проверку 
 cout << "The sum of all fractions by a cycle: [1..n] 1/n = " << FractionCounter(atoi(argv[1])) << endl; 	//Вывод результата на экран и вычисление его через другой модуль
 return 0; 									//Возврат нуля - int main функция
 }
+
+
