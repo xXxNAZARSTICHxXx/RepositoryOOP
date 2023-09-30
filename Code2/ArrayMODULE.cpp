@@ -109,5 +109,8 @@ void del_me(){
     df
     sdfssdf
     sdfssdf
+
+
+    cout << "result ";
 }   
 }
