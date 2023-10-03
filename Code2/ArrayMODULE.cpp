@@ -1,5 +1,4 @@
-//Выполнил Стич Назар Иванович ИВТ-22
-
+//Выполнил Стич Назар ИВТ-22
 #include <iostream>                 //Подключение базовой библиотеки для вывода в командную строку строк
 #include <time.h>                   //Подключение библиотеки time для будущего рандомайзера
 #include <fstream>                  //Подключение библиотеки для работы с файлами
@@ -102,19 +101,5 @@ void clearBinaryFile(const string& filename) {
 
     out.close();                                            //закрываем файл
     return;                                                 //вылетаем из функции
-<<<<<<< HEAD
-=======
-}
-
-void del_me(){
-    hjfkjshfskdjfhskdhf
-    sdfs
-    df
-    sdfssdf
-    sdfssdf
-
-
-    cout << "result ";
->>>>>>> dev
 }   
 }
