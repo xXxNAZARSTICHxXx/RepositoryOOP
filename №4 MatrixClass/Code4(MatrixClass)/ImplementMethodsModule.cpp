@@ -1,83 +1,97 @@
-///Стич Назар Иванович ИВТ-22 (КЛАССЫ)
-///Модульный файл - хранит все методы реализации класса                
-#include <iostream>                                                                     //Подключение библиотеки для ввода и вывода
-#include <fstream>                                                                      //Подключение библиотеки для ввода и вывода, а также работы с файлом
-#include <clocale>                                                                      //Подключение библиотеки для изменения кодировки текста
-#include "DynamicMatrix.h"                                                              //Подключение собственноого заголовочного файла~Класса для работы с кодом  
+#include "DynamicMatrix.h"
+#include <iostream>
 
-DynamicMatrix::DynamicMatrix(int rows, int cols) : rows(rows), cols(cols)               ///Метод инициализации матрицы
-{ 
-    matrix = new int*[rows];                                                            //Выделение памяти на строки
-    for (int i = 0; i < rows; i++) {                                                    //Проход по строкам
-        matrix[i] = new int[cols];                                                      //Выделение памяти на столбцы
-        for (int j = 0; j < cols; j++) {                                                //Проход по столбцам
-            matrix[i][j] = 0;                                                           //Заполнение матрицы
+DynamicMatrix::DynamicMatrix() : rows(0), cols(0), data(nullptr) {}
+
+// Конструктор постройки
+DynamicMatrix::DynamicMatrix(int rows, int cols) : rows(rows), cols(cols) {
+    // Выделение памяти под матрицу
+    data = new int*[rows];
+    for (int i = 0; i < rows; ++i) {
+        data[i] = new int[cols];
+    }
+
+    // Инициализация значений матрицы
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            data[i][j] = 0;
         }
     }
 }
 
-void DynamicMatrix::setElement(int row, int col, int value)                             ///Метод замены отдельного числа в матрице
-{
-    if (row >= 0 && row < rows && col >= 0 && col < cols) {                             //Проверка на правильное введение позиций в диапазоне
-        matrix[row][col] = value;                                                       //Присвоение значения
-    } 
-    else {
-        std::cout << "Неправильно введенное кол-во строк или столбцов" << std::endl;    //Вывод строки "Неправильно введенное кол-во строк или столбцов"
+// Деструктор
+DynamicMatrix::~DynamicMatrix() {
+    // Освобождение памяти
+    for (int i = 0; i < rows; ++i) {
+        delete[] data[i];
+    }
+    delete[] data;
+}
+
+// Конструктор копирования
+DynamicMatrix::DynamicMatrix(const DynamicMatrix& other) : rows(other.rows), cols(other.cols) {
+    // Выделение памяти под матрицу
+    data = new int*[rows];
+    for (int i = 0; i < rows; ++i) {
+        data[i] = new int[cols];
+    }
+
+    // Копирование значений из другой матрицы
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            data[i][j] = other.data[i][j];
+        }
     }
 }
 
-int DynamicMatrix::getElement(int row, int col)                                         ///Метод получения элемента из матрицы
-{
-    if (row >= 0 && row < rows && col >= 0 && col < cols) {                             //Проверка на правильное введение позиций в диапазоне
-        return matrix[row][col];                                                        //Возврат значения
-    } 
-    else {
-        std::cout << "Неправильно введенное кол-во строк или столбцов" << std::endl;    //Вывод строки "Неправильно введенное кол-во строк или столбцов"
-        return 0;                                                                       //Возврат 0 - т.к. функция принимает значение int
-    }
-}
+// Оператор присваивания
+DynamicMatrix& DynamicMatrix::operator=(const DynamicMatrix& other) {
+    if (this != &other) {
+        // Освобождение памяти текущей матрицы
+        for (int i = 0; i < rows; ++i) {
+            delete[] data[i];
+        }
+        delete[] data;
 
-void DynamicMatrix::saveToFile(const std::string& filename)                             ///Метод загрузки матрицы из файла
-{
-    std::ofstream file(filename);                                                       //Открытие файла на запись
-    if (file.is_open()) {                                                               //Если файл открыт
-        file << rows << " " << cols << "\n";                                            //Запись кол-во строк и столбцов
-        for (int i = 0; i < rows; i++) {                                                //Проход по строкам
-            for (int j = 0; j < cols; j++) {                                            //Проход по столбцам
-                file << matrix[i][j] << " ";                                            //Запись матрицы
+        // Копирование значений из другой матрицы
+        rows = other.rows;
+        cols = other.cols;
+
+        // Выделение памяти под матрицу
+        data = new int*[rows];
+        for (int i = 0; i < rows; ++i) {
+            data[i] = new int[cols];
+        }
+
+        // Копирование значений из другой матрицы
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                data[i][j] = other.data[i][j];
             }
-            file << "\n";                                                               //Переход на следующую строку
         }
-        file.close();                                                                   //Закрытие файла
-    } 
-    else {
-        std::cout << "Файл не может быть открыт" << std::endl;                          //Вывод строки "Файл не может быть открыт"
+    }
+    return *this;
+}
+
+
+
+
+// Метод для вывода матрицы
+void DynamicMatrix::printMatrix() const {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            std::cout << data[i][j] << " ";
+        }
+        std::cout << std::endl;
     }
 }
 
-void DynamicMatrix::loadFromFile(const std::string& filename)                           ///Метод загрузки матрицы в файл
-{
-    std::ifstream file(filename);                                                       //Открытие файла на чтение
-    if (file.is_open()) {                                                               //Если файл открыт
-        file >> rows >> cols;                                                           //Считывание кол-во строк и столбцов
-        matrix = new int*[rows];                                                        //Создание матрицы ~ выделение памяти
-        for (int i = 0; i < rows; i++) {                                                //Проход по строкам
-            matrix[i] = new int[cols];                                                  //Создание матрицы ~ выделение памяти
-            for (int j = 0; j < cols; j++) {                                            //Проход по столбцам
-                file >> matrix[i][j];                                                   //Чтение матрицы
-            }
-        }
-        file.close();                                                                   //Закрытие файла
-    } 
-    else {
-        std::cout << "Файл не может быть открыт" << std::endl;                          //Вывод строки "Файл не может быть открыт"
+// Метод для установки значения в ячейке матрицы
+void DynamicMatrix::setElement(int row, int col, int value) {
+    setlocale(LC_ALL, "Russian");
+    if (row >= 0 && row < rows && col >= 0 && col < cols) {
+        data[row][col] = value;
+    } else {
+        std::cerr << "Ошибка: Недопустимые индексы ячейки." << std::endl;
     }
 }
-
-DynamicMatrix::~DynamicMatrix()                                                         //Деструктор матрицы
-{
-    for (int i = 0; i < rows; i++) {                                                    //Проход по строкам
-        delete[] matrix[i];                                                             //Освобождение памяти по строкам
-    }
-    delete[] matrix;                                                                    //Освобождение памяти
-}   
